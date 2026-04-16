@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Product } from "@aurum/shared";
-import { formatCurrency, getStartingPrice } from "@/lib/pricing";
+import { formatStartingPrice, getStartingPrice } from "@/lib/pricing";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
@@ -22,13 +22,10 @@ export function ProductCard({ product }: { product: Product }) {
         <p className="mt-3 font-serif text-3xl text-ink">{product.name}</p>
         <p className="mt-3 text-sm leading-7 text-ink/63">{product.shortDescription}</p>
         <div className="mt-5 flex items-end justify-between">
-          <p className="font-serif text-2xl text-ink">
-            {formatCurrency(getStartingPrice(product))}
-          </p>
+          <p className="font-serif text-2xl text-ink">{formatStartingPrice(getStartingPrice(product))}</p>
           <span className="text-sm font-semibold text-ink/70">View design</span>
         </div>
       </div>
     </Link>
   );
 }
-

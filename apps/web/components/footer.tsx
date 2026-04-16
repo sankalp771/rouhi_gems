@@ -7,19 +7,16 @@ export function Footer() {
         <div>
           <p className="font-serif text-3xl text-ink">Rouhi Gems</p>
           <p className="mt-3 max-w-md text-sm leading-7 text-ink/60">
-            Phase 1 foundation for a premium make-to-order jewellery storefront.
-            Next steps after this UI slice are Supabase, Cloudinary, notifications,
-            and the full order backend.
+            Fine jewellery shaped in gold and brought to life with diamonds.
           </p>
         </div>
         <div className="flex flex-wrap gap-4 text-sm text-ink/70">
           <Link href="/">Home</Link>
           <Link href="/catalogue">Catalogue</Link>
-          <Link href="/custom-order">Custom Order</Link>
           <Link href="/about">About</Link>
         </div>
+        <p className="text-sm text-ink/55">(c) 2026 Rouhi Gems</p>
       </div>
     </footer>
   );
 }
-

@@ -2,19 +2,19 @@ import { SectionTitle } from "@/components/section-title";
 
 const principles = [
   {
-    title: "Made to order, not mass stocked",
+    title: "Designed with feeling",
     description:
-      "We keep the story personal by producing after intent, which reduces dead inventory and leaves room for customization."
+      "Every Rouhi Gems piece begins with a soft, feminine point of view and finishes with the brilliance of carefully chosen diamonds."
   },
   {
-    title: "Gold pricing stays transparent",
+    title: "Crafted in warm gold",
     description:
-      "The UI keeps gold rate, diamond value, and making charges understandable instead of hiding them behind generic luxury language."
+      "Our collection is shaped in 14Kt and 18Kt gold so each design feels luminous, wearable, and lasting."
   },
   {
-    title: "Warm premium, not intimidating premium",
+    title: "Made for meaningful moments",
     description:
-      "The visual system is intentionally closer to Indian fine jewellery browsing patterns than global fashion minimalism."
+      "From gifting and bridal celebrations to everyday keepsakes, our jewellery is created to stay close to the heart."
   }
 ];
 
@@ -23,21 +23,19 @@ export default function AboutPage() {
     <div className="shell px-2 py-10 pb-20">
       <SectionTitle
         eyebrow="About Rouhi Gems"
-        title="A make-to-order fine jewellery brand built for trust-first digital buying."
-        description="This first implementation leans into clarity, craftsmanship, and premium softness so the brand feels aspirational without feeling distant."
+        title="Fine jewellery with warmth, softness, and a modern Indian spirit."
+        description="Rouhi Gems is created for those who love graceful gold, light-filled diamonds, and pieces that feel personal from the very first glance."
       />
 
       <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="glass-panel rounded-[2rem] p-8">
           <p className="font-serif text-4xl leading-tight text-ink">
-            Lab grown diamonds, handcrafted gold, and guided customisation for
-            India’s next generation of jewellery buyers.
+            Jewellery that feels gentle, radiant, and made to be remembered.
           </p>
           <p className="mt-5 text-base leading-8 text-ink/70">
-            The build plan is anchored in a strong commercial truth: metal price
-            tracks the market, but margin and differentiation come from design,
-            making, and high-trust diamond presentation. The site experience
-            reflects that by helping customers configure pieces with confidence.
+            We believe luxury should feel inviting. That is why our pieces bring
+            together warm gold tones, diamond brilliance, and silhouettes that
+            move effortlessly between celebration, gifting, and everyday wear.
           </p>
         </div>
 
@@ -58,4 +56,3 @@ export default function AboutPage() {
     </div>
   );
 }
-

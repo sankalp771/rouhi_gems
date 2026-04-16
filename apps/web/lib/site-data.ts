@@ -8,32 +8,8 @@ export const categories = [
   { label: "Earrings", value: "earring" }
 ] as const;
 
-export const homepageMetrics = [
-  { label: "Launch-ready core designs", value: "8" },
-  { label: "Jewellery categories covered", value: "4" },
-  { label: "Guided custom steps", value: "3" }
-];
-
-export const featuredCollections = [
-  {
-    tag: "Signature",
-    name: "Everyday Diamond Essentials",
-    description:
-      "Minimal silhouettes with enough brilliance to feel special from day to night."
-  },
-  {
-    tag: "Ceremony",
-    name: "Wedding Gifting Moments",
-    description:
-      "Soft gold forms and graceful settings shaped for celebration and keepsake value."
-  },
-  {
-    tag: "Modern Heirloom",
-    name: "Warm Rose-Toned Statements",
-    description:
-      "An editorial mix of blush undertones and polished gold for contemporary Indian luxury."
-  }
-];
+const standardDiamondGrades = ["SI IJ", "SI GH", "VS GH", "VVS EF"] as const;
+const standardGoldPurities = ["14k", "18k"] as const;
 
 export const products: Product[] = [
   {
@@ -50,13 +26,14 @@ export const products: Product[] = [
     highlights: [
       "Rounded halo silhouette with a delicate floral spread",
       "Balanced for daily wear with elevated occasion appeal",
-      "Best suited to 18k gold with EF/VS or GH/VS lab diamonds"
+      "A luminous diamond face with soft rose warmth"
     ],
-    goldPurities: ["18k", "22k"],
-    diamondFocus: "EF/VS centre-led cluster",
-    startingWeight: 5.2,
-    startingDiamondGrade: "EF/VS",
-    startingDiamondCarat: 0.35
+    availableGoldPurities: [...standardGoldPurities],
+    availableDiamondGrades: [...standardDiamondGrades],
+    goldWeightG: 3.2,
+    diamondWeightCt: 0.265,
+    labourCharge: 3800,
+    diamondFocus: "Floral cluster"
   },
   {
     id: "ring-sunveil",
@@ -71,14 +48,15 @@ export const products: Product[] = [
       "radial-gradient(circle at 40% 20%, rgba(255,255,255,0.95), rgba(247,240,223,0.96) 44%, rgba(199,164,100,0.72) 100%)",
     highlights: [
       "Solitaire-first architecture with elevated shank detailing",
-      "Ideal for proposal and self-purchase use cases",
-      "Works well from 0.30ct to 1.20ct"
+      "Ideal for proposal and self-purchase moments",
+      "A refined shape that keeps the stone in focus"
     ],
-    goldPurities: ["18k", "22k"],
-    diamondFocus: "Solitaire-led, EF/VS ideal",
-    startingWeight: 4.8,
-    startingDiamondGrade: "EF/VS",
-    startingDiamondCarat: 0.4
+    availableGoldPurities: [...standardGoldPurities],
+    availableDiamondGrades: [...standardDiamondGrades],
+    goldWeightG: 3.6,
+    diamondWeightCt: 0.31,
+    labourCharge: 3900,
+    diamondFocus: "Solitaire-led setting"
   },
   {
     id: "bracelet-roseline",
@@ -94,13 +72,14 @@ export const products: Product[] = [
     highlights: [
       "Comfort-focused articulation for graceful movement",
       "Elegant for gifting and ceremonial wear",
-      "Looks rich in both rose and classic yellow gold finishes"
+      "A fluid line of diamonds with warm gold framing"
     ],
-    goldPurities: ["18k", "22k"],
-    diamondFocus: "GH/VS linear arrangement",
-    startingWeight: 11.5,
-    startingDiamondGrade: "GH/VS",
-    startingDiamondCarat: 1.2
+    availableGoldPurities: [...standardGoldPurities],
+    availableDiamondGrades: [...standardDiamondGrades],
+    goldWeightG: 7.8,
+    diamondWeightCt: 0.89,
+    labourCharge: 5400,
+    diamondFocus: "Linear diamond line"
   },
   {
     id: "bracelet-vira",
@@ -116,13 +95,14 @@ export const products: Product[] = [
     highlights: [
       "Personalisation-friendly station design",
       "Lightweight silhouette for frequent wear",
-      "Easy entry point into premium gifting"
+      "Diamond accents that keep the look polished and bright"
     ],
-    goldPurities: ["18k", "22k"],
-    diamondFocus: "GH/SI accent diamonds",
-    startingWeight: 8.3,
-    startingDiamondGrade: "GH/SI",
-    startingDiamondCarat: 0.45
+    availableGoldPurities: [...standardGoldPurities],
+    availableDiamondGrades: [...standardDiamondGrades],
+    goldWeightG: 5.4,
+    diamondWeightCt: 0.33,
+    labourCharge: 5100,
+    diamondFocus: "Station-set diamonds"
   },
   {
     id: "pendant-lustre-drop",
@@ -137,14 +117,15 @@ export const products: Product[] = [
       "radial-gradient(circle at 50% 20%, rgba(255,255,255,0.96), rgba(247,240,223,0.94) 45%, rgba(206,141,152,0.55))",
     highlights: [
       "Pear-drop face with subtle movement",
-      "Pairs well with both chain and collar styling",
-      "Balances statement presence with everyday elegance"
+      "Pairs beautifully with both chain and collar styling",
+      "A graceful silhouette with diamond-led sparkle"
     ],
-    goldPurities: ["18k", "22k"],
-    diamondFocus: "EF/VS pear-inspired layout",
-    startingWeight: 5.6,
-    startingDiamondGrade: "EF/VS",
-    startingDiamondCarat: 0.42
+    availableGoldPurities: [...standardGoldPurities],
+    availableDiamondGrades: [...standardDiamondGrades],
+    goldWeightG: 4.1,
+    diamondWeightCt: 0.29,
+    labourCharge: 3600,
+    diamondFocus: "Pear-inspired diamond drop"
   },
   {
     id: "pendant-zaria",
@@ -160,13 +141,14 @@ export const products: Product[] = [
     highlights: [
       "Medallion-inspired silhouette with a radiant centre",
       "Works beautifully in yellow-gold-led styling",
-      "Strong gifting piece for festive drops"
+      "Diamond accents bring light without losing softness"
     ],
-    goldPurities: ["18k", "22k"],
-    diamondFocus: "GH/VS star-set accents",
-    startingWeight: 6.3,
-    startingDiamondGrade: "GH/VS",
-    startingDiamondCarat: 0.28
+    availableGoldPurities: [...standardGoldPurities],
+    availableDiamondGrades: [...standardDiamondGrades],
+    goldWeightG: 4.6,
+    diamondWeightCt: 0.24,
+    labourCharge: 3500,
+    diamondFocus: "Star-set diamond accents"
   },
   {
     id: "earring-petal",
@@ -181,14 +163,15 @@ export const products: Product[] = [
       "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,223,229,0.88), rgba(199,164,100,0.58))",
     highlights: [
       "Compact floral silhouette for gifting and everyday wear",
-      "Strong hero image potential for catalogue thumbnails",
-      "Easy to scale across diamond sizes"
+      "Strong hero image presence with a bright diamond face",
+      "A balanced piece that feels polished from every angle"
     ],
-    goldPurities: ["18k", "22k"],
-    diamondFocus: "GH/VS floral cluster",
-    startingWeight: 5.1,
-    startingDiamondGrade: "GH/VS",
-    startingDiamondCarat: 0.38
+    availableGoldPurities: [...standardGoldPurities],
+    availableDiamondGrades: [...standardDiamondGrades],
+    goldWeightG: 3.9,
+    diamondWeightCt: 0.27,
+    labourCharge: 4300,
+    diamondFocus: "Floral diamond cluster"
   },
   {
     id: "earring-mira",
@@ -203,13 +186,14 @@ export const products: Product[] = [
       "linear-gradient(145deg, rgba(247,240,223,0.96), rgba(255,255,255,0.92), rgba(206,141,152,0.62))",
     highlights: [
       "Slim drop profile with movement-led elegance",
-      "Designed for high-intent festive shoppers",
-      "Suited to 18k constructions with lighter diamond spread"
+      "Designed for festive dressing and intimate celebrations",
+      "A longer line of sparkle with soft visual weight"
     ],
-    goldPurities: ["18k", "22k"],
-    diamondFocus: "GH/SI linear sparkle",
-    startingWeight: 6.9,
-    startingDiamondGrade: "GH/SI",
-    startingDiamondCarat: 0.55
+    availableGoldPurities: [...standardGoldPurities],
+    availableDiamondGrades: [...standardDiamondGrades],
+    goldWeightG: 4.8,
+    diamondWeightCt: 0.41,
+    labourCharge: 4600,
+    diamondFocus: "Linear drop diamonds"
   }
 ];

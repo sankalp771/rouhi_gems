@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/product-card";
+import { ProductConfigurator } from "@/components/product-configurator";
 import { SectionTitle } from "@/components/section-title";
-import { formatCurrency, getStartingPrice } from "@/lib/pricing";
+import { formatStartingPrice, getStartingPrice } from "@/lib/pricing";
 import { products } from "@/lib/site-data";
 
 type ProductDetailPageProps = {
@@ -45,18 +45,18 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
           <div className="grid gap-4 md:grid-cols-3">
             <div className="rounded-[1.5rem] border border-gold/15 bg-white/80 p-5">
-              <p className="text-sm text-ink/50">Starting at</p>
+              <p className="text-sm text-ink/50">Price</p>
               <p className="mt-2 font-serif text-3xl text-ink">
-                {formatCurrency(getStartingPrice(product))}
+                {formatStartingPrice(getStartingPrice(product))}
               </p>
             </div>
             <div className="rounded-[1.5rem] border border-gold/15 bg-white/80 p-5">
-              <p className="text-sm text-ink/50">Gold options</p>
-              <p className="mt-2 text-lg text-ink">{product.goldPurities.join(" / ")}</p>
+              <p className="text-sm text-ink/50">Gold Weight</p>
+              <p className="mt-2 text-lg text-ink">{product.goldWeightG.toFixed(1)}g</p>
             </div>
             <div className="rounded-[1.5rem] border border-gold/15 bg-white/80 p-5">
-              <p className="text-sm text-ink/50">Diamond profile</p>
-              <p className="mt-2 text-lg text-ink">{product.diamondFocus}</p>
+              <p className="text-sm text-ink/50">Diamond Weight</p>
+              <p className="mt-2 text-lg text-ink">{product.diamondWeightCt.toFixed(3)}ct</p>
             </div>
           </div>
 
@@ -70,29 +70,18 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
               ))}
             </ul>
           </div>
-
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href={`/custom-order?product=${product.slug}`}
-              className="rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-ink/90"
-            >
-              Customise This Design
-            </Link>
-            <Link
-              href="/catalogue"
-              className="rounded-full border border-gold/25 bg-white/80 px-6 py-3 text-sm font-semibold text-ink transition hover:border-gold/50"
-            >
-              Back to Catalogue
-            </Link>
-          </div>
         </div>
+      </div>
+
+      <div className="mt-10">
+        <ProductConfigurator product={product} />
       </div>
 
       <div className="mt-16">
         <SectionTitle
           eyebrow="You May Also Like"
           title="More pieces from the same family."
-          description="Related product cards keep the browsing loop alive without forcing a hard sales push."
+          description="Discover more silhouettes with the same sense of softness, light, and detail."
         />
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {relatedProducts.map((relatedProduct) => (

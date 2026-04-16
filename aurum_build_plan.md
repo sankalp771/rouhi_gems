@@ -1,7 +1,7 @@
 # Rouhi Gems — Custom Jewellery Marketplace Build Plan
 
 **Model:** 100% Make-to-Order | **Products:** Rings, Bracelets, Pendants, Earrings  
-**Materials:** 18k/22k Gold + Lab Grown Diamonds (IGI certified)  
+**Materials:** 14k/18k Gold + Lab Grown Diamonds (IGI certified)  
 **Target:** India, pan-city launch
 
 ---

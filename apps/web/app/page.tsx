@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
 import { SectionTitle } from "@/components/section-title";
-import { featuredCollections, homepageMetrics, products } from "@/lib/site-data";
+import { products } from "@/lib/site-data";
 
 const featuredProducts = products.slice(0, 4);
 
@@ -11,17 +11,16 @@ export default function HomePage() {
       <section className="shell grid gap-10 px-2 pb-14 pt-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pt-14">
         <div className="space-y-8">
           <div className="inline-flex rounded-full border border-gold/20 bg-white/60 px-4 py-2 text-sm text-ink/75 shadow-soft">
-            Made to order in India | 18k / 22k gold | IGI lab diamonds
+            Made to order in India | 14Kt & 18Kt gold | Diamond-set designs
           </div>
           <div className="space-y-5">
             <p className="font-serif text-5xl leading-none text-ink md:text-7xl">
-              Jewellery crafted with
-              <span className="gold-text"> softness, shine, and story.</span>
+              Pieces that hold
+              <span className="gold-text"> light, love, and memory.</span>
             </p>
             <p className="max-w-xl text-lg leading-8 text-ink/72">
-              Phase 1 starts with a high-trust storefront inspired by premium
-              Indian fine jewellery brands: calm ivory surfaces, blush accents,
-              warm gold highlights, and a guided custom order flow.
+              Rouhi Gems brings together warm gold, luminous diamonds, and
+              graceful silhouettes for the moments you want to keep close.
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
@@ -33,61 +32,30 @@ export default function HomePage() {
             </Link>
             <Link
               className="rounded-full border border-gold/30 bg-white/80 px-6 py-3 text-sm font-semibold text-ink transition hover:border-gold/60"
-              href="/custom-order"
+              href="/catalogue"
             >
-              Start Custom Order
+              Create Your Piece
             </Link>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {homepageMetrics.map((metric) => (
-              <div
-                key={metric.label}
-                className="glass-panel rounded-[1.75rem] p-5"
-              >
-                <p className="font-serif text-3xl text-ink">{metric.value}</p>
-                <p className="mt-2 text-sm text-ink/60">{metric.label}</p>
-              </div>
-            ))}
           </div>
         </div>
 
         <div className="glass-panel relative rounded-[2rem] bg-shimmer p-4">
-          <div className="grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-[1.7rem] bg-white/75 p-4">
-              <div className="aspect-[4/5] rounded-[1.4rem] bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.95),_rgba(247,240,223,0.95)_45%,_rgba(206,141,152,0.2))] p-5">
-                <div className="flex h-full items-end rounded-[1.2rem] border border-white/70 bg-[linear-gradient(180deg,_rgba(255,255,255,0.4),_rgba(255,250,247,0.95))] p-6">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.3em] text-rose">
-                      Signature Edit
-                    </p>
-                    <p className="mt-3 font-serif text-4xl text-ink">
-                      Aurora Bloom Ring
-                    </p>
-                    <p className="mt-2 max-w-xs text-sm leading-6 text-ink/65">
-                      A softly sculpted rose-gold silhouette with lab diamond
-                      brilliance and a handcrafted finish.
-                    </p>
-                  </div>
+          <div className="rounded-[1.8rem] bg-white/72 p-5">
+            <div className="aspect-[4/5] rounded-[1.5rem] bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.95),_rgba(247,240,223,0.94)_40%,_rgba(206,141,152,0.28)_78%)] p-5">
+              <div className="flex h-full items-end rounded-[1.2rem] border border-white/70 bg-[linear-gradient(180deg,_rgba(255,255,255,0.3),_rgba(255,250,247,0.92))] p-6">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-rose">
+                    Signature Ring
+                  </p>
+                  <p className="mt-3 font-serif text-5xl text-ink">
+                    Aurora Bloom
+                  </p>
+                  <p className="mt-3 max-w-sm text-sm leading-7 text-ink/65">
+                    A delicate floral ring with soft rose warmth and a diamond
+                    cluster designed to glow from every angle.
+                  </p>
                 </div>
               </div>
-            </div>
-            <div className="grid gap-4">
-              {featuredCollections.map((collection) => (
-                <div
-                  key={collection.name}
-                  className="rounded-[1.5rem] border border-white/70 bg-white/80 p-5"
-                >
-                  <p className="text-xs uppercase tracking-[0.3em] text-gold">
-                    {collection.tag}
-                  </p>
-                  <p className="mt-3 font-serif text-2xl text-ink">
-                    {collection.name}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-ink/62">
-                    {collection.description}
-                  </p>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -95,9 +63,9 @@ export default function HomePage() {
 
       <section className="shell px-2 py-10">
         <SectionTitle
-          eyebrow="Phase 1 Catalogue"
-          title="Eight foundational designs across four jewellery categories."
-          description="This first implementation ships with the minimum viable catalogue promised in the build plan, styled for premium browsing and ready to connect to real data later."
+          eyebrow="Featured Designs"
+          title="A collection of diamond-set pieces for gifting, celebration, and everyday beauty."
+          description="Explore rings, bracelets, pendants, and earrings designed in warm gold tones and finished with light-catching diamonds."
         />
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {featuredProducts.map((product) => (
@@ -110,29 +78,28 @@ export default function HomePage() {
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="glass-panel rounded-[2rem] p-8">
             <p className="text-xs uppercase tracking-[0.3em] text-rose">
-              Why this works
+              Crafted for You
             </p>
             <p className="mt-3 font-serif text-4xl text-ink">
-              Custom ordering without overwhelming the buyer.
+              Choose the piece you love, then refine it beautifully.
             </p>
             <p className="mt-4 text-base leading-8 text-ink/70">
-              The experience breaks decision-making into elegant steps: pick a
-              design family, tune purity and stone details, and submit contact
-              information while a live pricing panel keeps everything transparent.
+              Every product page lets you explore gold purity, diamond grade,
+              and price in one calm, guided view before sending your request.
             </p>
             <Link
-              href="/custom-order"
+              href="/catalogue"
               className="mt-6 inline-flex rounded-full border border-gold/30 px-5 py-3 text-sm font-semibold text-ink transition hover:bg-white/70"
             >
-              Open Custom Form
+              Explore Catalogue
             </Link>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
             {[
-              "Browse by category with calm, editorial cards",
-              "Inspect each piece on a dedicated product detail page",
-              "Configure gold purity, weight, and diamond specs live"
+              "Diamond-set pieces across rings, bracelets, pendants, and earrings",
+              "Product pages with fixed gold and diamond weights for clarity",
+              "Simple request flow for the exact piece you want"
             ].map((item) => (
               <div
                 key={item}

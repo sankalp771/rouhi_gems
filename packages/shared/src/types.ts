@@ -1,6 +1,6 @@
 export type ProductCategory = "ring" | "bracelet" | "pendant" | "earring";
 
-export type DiamondGrade = "EF/VS" | "GH/VS" | "GH/SI" | "None";
+export type DiamondGrade = "SI IJ" | "SI GH" | "VS GH" | "VVS EF";
 
 export type OrderStatus =
   | "enquiry_received"
@@ -10,7 +10,7 @@ export type OrderStatus =
   | "dispatched"
   | "delivered";
 
-export type GoldPurity = "18k" | "22k";
+export type GoldPurity = "14k" | "18k";
 
 export interface Product {
   id: string;
@@ -22,11 +22,12 @@ export interface Product {
   description: string;
   palette: string;
   highlights: string[];
-  goldPurities: GoldPurity[];
+  availableGoldPurities: GoldPurity[];
+  availableDiamondGrades: DiamondGrade[];
+  goldWeightG: number;
+  diamondWeightCt: number;
+  labourCharge: number;
   diamondFocus: string;
-  startingWeight: number;
-  startingDiamondGrade: DiamondGrade;
-  startingDiamondCarat: number;
 }
 
 export interface ProductVariant {

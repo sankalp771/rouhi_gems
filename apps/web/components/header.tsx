@@ -3,7 +3,6 @@ import Link from "next/link";
 const navigation = [
   { href: "/", label: "Home" },
   { href: "/catalogue", label: "Catalogue" },
-  { href: "/custom-order", label: "Custom Order" },
   { href: "/about", label: "About" }
 ];
 
@@ -26,13 +25,12 @@ export function Header() {
           ))}
         </nav>
         <Link
-          href="/custom-order"
+          href="/catalogue"
           className="rounded-full border border-gold/25 bg-white/80 px-4 py-2 text-sm font-semibold text-ink transition hover:border-gold/60"
         >
-          Get Quote
+          Create Your Piece
         </Link>
       </div>
     </header>
   );
 }
-

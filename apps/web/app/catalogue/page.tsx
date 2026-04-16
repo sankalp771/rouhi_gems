@@ -19,8 +19,8 @@ export default function CataloguePage({ searchParams }: CataloguePageProps) {
     <div className="shell px-2 py-10 pb-20">
       <SectionTitle
         eyebrow="Catalogue"
-        title="A refined, filterable jewellery catalogue for launch."
-        description="Each category has two seeded designs to match the Phase 1 milestone. The structure is ready to swap from static data to Supabase-backed inventory later."
+        title="Explore diamond-set designs across every signature category."
+        description="Browse rings, bracelets, pendants, and earrings shaped in warm gold tones and finished with luminous diamonds."
       />
 
       <div className="mt-8 flex flex-wrap gap-3">
@@ -55,4 +55,3 @@ export default function CataloguePage({ searchParams }: CataloguePageProps) {
     </div>
   );
 }
-
