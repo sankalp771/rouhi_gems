@@ -1,6 +1,6 @@
 export type ProductCategory = "ring" | "bracelet" | "pendant" | "earring";
 
-export type DiamondGrade = "SI IJ" | "SI GH" | "VS GH" | "VVS EF";
+export type DiamondGrade = "EF/VS" | "GH/VS" | "GH/SI" | "None";
 
 export type OrderStatus =
   | "enquiry_received"

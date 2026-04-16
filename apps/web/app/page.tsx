@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
 import { SectionTitle } from "@/components/section-title";
+import { getCurrentGoldSnapshot } from "@/lib/gold-price";
 import { products } from "@/lib/site-data";
 
 const featuredProducts = products.slice(0, 4);
 
-export default function HomePage() {
+export default async function HomePage() {
+  const goldSnapshot = await getCurrentGoldSnapshot();
+
   return (
     <div className="pb-24">
       <section className="shell grid gap-10 px-2 pb-14 pt-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pt-14">
@@ -69,7 +72,11 @@ export default function HomePage() {
         />
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              goldRates={goldSnapshot.rates ?? undefined}
+            />
           ))}
         </div>
       </section>

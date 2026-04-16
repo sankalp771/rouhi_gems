@@ -5,11 +5,13 @@ export const goldPriceByPurity = {
   "18k": 5600,
 } as const;
 
+export type GoldRateMap = Record<keyof typeof goldPriceByPurity, number>;
+
 export const diamondPricePerCarat: Record<DiamondGrade, number> = {
-  "SI IJ": 42000,
-  "SI GH": 56000,
-  "VS GH": 71000,
-  "VVS EF": 88000
+  "EF/VS": 88000,
+  "GH/VS": 71000,
+  "GH/SI": 56000,
+  None: 0
 };
 
 const labourByCategory: Record<ProductCategory, number> = {
@@ -24,16 +26,19 @@ export function calculateOrderPrice({
   goldPurity,
   weight,
   diamondGrade,
-  diamondCarat
+  diamondCarat,
+  goldRates = goldPriceByPurity
 }: {
   category: ProductCategory;
   goldPurity: keyof typeof goldPriceByPurity;
   weight: number;
   diamondGrade: DiamondGrade;
   diamondCarat: number;
+  goldRates?: GoldRateMap;
 }) {
-  const goldCost = weight * goldPriceByPurity[goldPurity];
-  const diamondCost = diamondCarat * diamondPricePerCarat[diamondGrade];
+  const goldCost = weight * goldRates[goldPurity];
+  const diamondCost =
+    diamondGrade === "None" ? 0 : diamondCarat * diamondPricePerCarat[diamondGrade];
   const labourCharge = labourByCategory[category];
   const gst = (goldCost + labourCharge) * 0.03 + diamondCost * 0.015;
   const total = goldCost + diamondCost + labourCharge + gst;
@@ -55,26 +60,29 @@ export function formatCurrency(value: number) {
   }).format(value);
 }
 
-export function getStartingPrice(product: Product) {
+export function getStartingPrice(product: Product, goldRates?: GoldRateMap) {
   return calculateOrderPrice({
     category: product.category,
     goldPurity: product.availableGoldPurities[0],
     weight: product.goldWeightG,
     diamondGrade: product.availableDiamondGrades[0],
-    diamondCarat: product.diamondWeightCt
+    diamondCarat: product.diamondWeightCt,
+    goldRates
   }).total;
 }
 
 export function getProductPrice(product: Product, options?: {
   goldPurity?: keyof typeof goldPriceByPurity;
   diamondGrade?: DiamondGrade;
+  goldRates?: GoldRateMap;
 }) {
   return calculateOrderPrice({
     category: product.category,
     goldPurity: options?.goldPurity ?? product.availableGoldPurities[0],
     weight: product.goldWeightG,
     diamondGrade: options?.diamondGrade ?? product.availableDiamondGrades[0],
-    diamondCarat: product.diamondWeightCt
+    diamondCarat: product.diamondWeightCt,
+    goldRates: options?.goldRates
   });
 }
 

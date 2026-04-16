@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/product-card";
 import { ProductConfigurator } from "@/components/product-configurator";
 import { SectionTitle } from "@/components/section-title";
+import { getCurrentGoldSnapshot } from "@/lib/gold-price";
 import { formatStartingPrice, getStartingPrice } from "@/lib/pricing";
 import { products } from "@/lib/site-data";
 
@@ -11,12 +12,14 @@ type ProductDetailPageProps = {
   };
 };
 
-export default function ProductDetailPage({ params }: ProductDetailPageProps) {
+export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const product = products.find((item) => item.slug === params.slug);
 
   if (!product) {
     notFound();
   }
+
+  const goldSnapshot = await getCurrentGoldSnapshot();
 
   const relatedProducts = products
     .filter((item) => item.category === product.category && item.id !== product.id)
@@ -47,7 +50,9 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             <div className="rounded-[1.5rem] border border-gold/15 bg-white/80 p-5">
               <p className="text-sm text-ink/50">Price</p>
               <p className="mt-2 font-serif text-3xl text-ink">
-                {formatStartingPrice(getStartingPrice(product))}
+                {goldSnapshot.rates
+                  ? formatStartingPrice(getStartingPrice(product, goldSnapshot.rates))
+                  : "Price on request"}
               </p>
             </div>
             <div className="rounded-[1.5rem] border border-gold/15 bg-white/80 p-5">
@@ -74,7 +79,14 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
       </div>
 
       <div className="mt-10">
-        <ProductConfigurator product={product} />
+        <ProductConfigurator
+          product={product}
+          initialGoldRates={goldSnapshot.rates}
+          initialFetchedAt={goldSnapshot.fetchedAt}
+          initialStale={goldSnapshot.stale}
+          initialSourceLabel={goldSnapshot.sourceLabel}
+          initialAvailable={goldSnapshot.available}
+        />
       </div>
 
       <div className="mt-16">
@@ -85,7 +97,11 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
         />
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {relatedProducts.map((relatedProduct) => (
-            <ProductCard key={relatedProduct.id} product={relatedProduct} />
+            <ProductCard
+              key={relatedProduct.id}
+              product={relatedProduct}
+              goldRates={goldSnapshot.rates ?? undefined}
+            />
           ))}
         </div>
       </div>

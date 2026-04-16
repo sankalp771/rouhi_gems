@@ -72,7 +72,7 @@ gold_prices         — id, purity, price_per_gram, valid_from (update daily)
 - Pages: Home, Catalogue (category filter), Product Detail, Custom Order Form, About
 - Custom Order Form:
   - Step 1: Category + base design selection
-  - Step 2: Gold purity, weight (slider), diamond grade + carat
+  - Step 2: Gold purity, diamond grade 
   - Step 3: Name, phone, city, special instructions
   - Live price calculator on the side (fetches gold price from DB)
 - On submit: save to `orders` table → send SMS via MSG91 → email alert to you

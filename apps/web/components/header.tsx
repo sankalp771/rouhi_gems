@@ -1,9 +1,10 @@
+import type { Route } from "next";
 import Link from "next/link";
 
 const navigation = [
-  { href: "/", label: "Home" },
-  { href: "/catalogue", label: "Catalogue" },
-  { href: "/about", label: "About" }
+  { href: "/" as Route, label: "Home" },
+  { href: "/catalogue" as Route, label: "Catalogue" },
+  { href: "/about" as Route, label: "About" }
 ];
 
 export function Header() {

@@ -1,8 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { DiamondGrade, GoldPurity, Product } from "@aurum/shared";
-import { formatCurrency, getProductPrice } from "@/lib/pricing";
+import {
+  formatCurrency,
+  getProductPrice,
+  type GoldRateMap
+} from "@/lib/pricing";
 
 type RequestForm = {
   name: string;
@@ -10,7 +14,29 @@ type RequestForm = {
   city: string;
 };
 
-export function ProductConfigurator({ product }: { product: Product }) {
+type GoldSnapshotResponse = {
+  sourceLabel: string;
+  rates: GoldRateMap | null;
+  fetchedAt: string | null;
+  stale: boolean;
+  available: boolean;
+};
+
+export function ProductConfigurator({
+  product,
+  initialGoldRates = null,
+  initialFetchedAt,
+  initialStale = true,
+  initialSourceLabel = "Live gold rate unavailable",
+  initialAvailable = false
+}: {
+  product: Product;
+  initialGoldRates?: GoldRateMap | null;
+  initialFetchedAt?: string | null;
+  initialStale?: boolean;
+  initialSourceLabel?: string;
+  initialAvailable?: boolean;
+}) {
   const [goldPurity, setGoldPurity] = useState<GoldPurity>(
     product.availableGoldPurities[1] ?? product.availableGoldPurities[0]
   );
@@ -24,16 +50,62 @@ export function ProductConfigurator({ product }: { product: Product }) {
     phone: "",
     city: ""
   });
+  const [liveGoldRates, setLiveGoldRates] = useState<GoldRateMap | null>(initialGoldRates);
+  const [goldFetchedAt, setGoldFetchedAt] = useState<string | null | undefined>(initialFetchedAt);
+  const [isGoldRateStale, setIsGoldRateStale] = useState(initialStale);
+  const [goldSourceLabel, setGoldSourceLabel] = useState(initialSourceLabel);
+  const [isGoldRateAvailable, setIsGoldRateAvailable] = useState(initialAvailable);
 
   const pricing = useMemo(
-    () => getProductPrice(product, { goldPurity, diamondGrade }),
-    [diamondGrade, goldPurity, product]
+    () =>
+      liveGoldRates
+        ? getProductPrice(product, { goldPurity, diamondGrade, goldRates: liveGoldRates })
+        : null,
+    [diamondGrade, goldPurity, liveGoldRates, product]
   );
 
   const submitRequest = () => {
     const random = Math.floor(100000 + Math.random() * 900000);
     setRequestId(`RG-${random}`);
   };
+
+  useEffect(() => {
+    let isActive = true;
+
+    const fetchGoldRates = async () => {
+      try {
+        const response = await fetch("/api/gold-price/current", {
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const payload = (await response.json()) as GoldSnapshotResponse;
+
+        if (!isActive) {
+          return;
+        }
+
+        setLiveGoldRates(payload.rates);
+        setGoldFetchedAt(payload.fetchedAt);
+        setIsGoldRateStale(payload.stale);
+        setGoldSourceLabel(payload.sourceLabel);
+        setIsGoldRateAvailable(payload.available);
+      } catch {
+        // Keep the last successful snapshot on screen.
+      }
+    };
+
+    fetchGoldRates();
+    const interval = window.setInterval(fetchGoldRates, 60_000);
+
+    return () => {
+      isActive = false;
+      window.clearInterval(interval);
+    };
+  }, []);
 
   return (
     <>
@@ -66,9 +138,28 @@ export function ProductConfigurator({ product }: { product: Product }) {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm text-ink/55">Estimated price</p>
-              <p className="mt-2 font-serif text-4xl text-ink">
-                {formatCurrency(pricing.total)}
+              {pricing ? (
+                <p className="mt-2 font-serif text-4xl text-ink">
+                  {formatCurrency(pricing.total)}
+                </p>
+              ) : (
+                <p className="mt-2 font-serif text-4xl text-ink">Price on request</p>
+              )}
+              <p className="mt-2 text-xs text-ink/52">
+                {pricing && liveGoldRates
+                  ? `${goldSourceLabel} for ${goldPurity === "14k" ? "14Kt" : "18Kt"}: ${formatCurrency(liveGoldRates[goldPurity])}/g`
+                  : goldSourceLabel}
               </p>
+              {goldFetchedAt ? (
+                <p className="mt-1 text-xs text-ink/45">
+                  Updated {formatTime(goldFetchedAt)}
+                  {isGoldRateStale ? " | refresh pending" : ""}
+                </p>
+              ) : !isGoldRateAvailable ? (
+                <p className="mt-1 text-xs text-ink/45">
+                  Add a provider key to show live gold-linked pricing.
+                </p>
+              ) : null}
             </div>
             <button
               type="button"
@@ -81,12 +172,14 @@ export function ProductConfigurator({ product }: { product: Product }) {
               Request This Piece
             </button>
           </div>
-          <div className="mt-5 space-y-3 border-t border-gold/10 pt-4 text-sm text-ink/62">
-            <PriceRow label="Gold value" value={pricing.goldCost} />
-            <PriceRow label="Diamond value" value={pricing.diamondCost} />
-            <PriceRow label="Making charges" value={pricing.labourCharge} />
-            <PriceRow label="GST" value={pricing.gst} />
-          </div>
+          {pricing ? (
+            <div className="mt-5 space-y-3 border-t border-gold/10 pt-4 text-sm text-ink/62">
+              <PriceRow label="Gold value" value={pricing.goldCost} />
+              <PriceRow label="Diamond value" value={pricing.diamondCost} />
+              <PriceRow label="Making charges" value={pricing.labourCharge} />
+              <PriceRow label="GST" value={pricing.gst} />
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -156,6 +249,15 @@ export function ProductConfigurator({ product }: { product: Product }) {
       ) : null}
     </>
   );
+}
+
+function formatTime(value: string) {
+  return new Intl.DateTimeFormat("en-IN", {
+    hour: "numeric",
+    minute: "2-digit",
+    day: "2-digit",
+    month: "short"
+  }).format(new Date(value));
 }
 
 function SelectorGroup({

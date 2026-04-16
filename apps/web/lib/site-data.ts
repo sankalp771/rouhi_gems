@@ -8,7 +8,7 @@ export const categories = [
   { label: "Earrings", value: "earring" }
 ] as const;
 
-const standardDiamondGrades = ["SI IJ", "SI GH", "VS GH", "VVS EF"] as const;
+const standardDiamondGrades = ["EF/VS", "GH/VS", "GH/SI"] as const;
 const standardGoldPurities = ["14k", "18k"] as const;
 
 export const products: Product[] = [

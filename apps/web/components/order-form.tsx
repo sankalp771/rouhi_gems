@@ -13,7 +13,7 @@ import { categories, products } from "@/lib/site-data";
 type FormState = {
   category: ProductCategory;
   baseDesignSlug: string;
-  goldPurity: "18k" | "22k";
+  goldPurity: "14k" | "18k";
   weight: number;
   diamondGrade: DiamondGrade;
   diamondCarat: number;
@@ -204,7 +204,7 @@ export function OrderForm({
                   Gold purity
                 </label>
                 <div className="mt-3 flex gap-3">
-                  {(["18k", "22k"] as const).map((purity) => (
+                  {(["14k", "18k"] as const).map((purity) => (
                     <button
                       key={purity}
                       type="button"

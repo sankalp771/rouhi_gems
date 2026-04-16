@@ -1,11 +1,22 @@
+import type { Route } from "next";
 import Link from "next/link";
 import type { Product } from "@aurum/shared";
-import { formatStartingPrice, getStartingPrice } from "@/lib/pricing";
+import {
+  formatStartingPrice,
+  getStartingPrice,
+  type GoldRateMap
+} from "@/lib/pricing";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({
+  product,
+  goldRates
+}: {
+  product: Product;
+  goldRates?: GoldRateMap;
+}) {
   return (
     <Link
-      href={`/product/${product.slug}`}
+      href={`/product/${product.slug}` as Route}
       className="group rounded-[1.8rem] border border-gold/12 bg-white/78 p-4 shadow-soft transition duration-300 hover:-translate-y-1 hover:border-gold/30"
     >
       <div
@@ -22,7 +33,11 @@ export function ProductCard({ product }: { product: Product }) {
         <p className="mt-3 font-serif text-3xl text-ink">{product.name}</p>
         <p className="mt-3 text-sm leading-7 text-ink/63">{product.shortDescription}</p>
         <div className="mt-5 flex items-end justify-between">
-          <p className="font-serif text-2xl text-ink">{formatStartingPrice(getStartingPrice(product))}</p>
+          <p className="font-serif text-2xl text-ink">
+            {goldRates
+              ? formatStartingPrice(getStartingPrice(product, goldRates))
+              : "Price on request"}
+          </p>
           <span className="text-sm font-semibold text-ink/70">View design</span>
         </div>
       </div>

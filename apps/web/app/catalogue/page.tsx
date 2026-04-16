@@ -1,5 +1,6 @@
 import { ProductCard } from "@/components/product-card";
 import { SectionTitle } from "@/components/section-title";
+import { getCurrentGoldSnapshot } from "@/lib/gold-price";
 import { categories, products } from "@/lib/site-data";
 
 type CataloguePageProps = {
@@ -8,8 +9,9 @@ type CataloguePageProps = {
   };
 };
 
-export default function CataloguePage({ searchParams }: CataloguePageProps) {
+export default async function CataloguePage({ searchParams }: CataloguePageProps) {
   const activeCategory = searchParams?.category ?? "all";
+  const goldSnapshot = await getCurrentGoldSnapshot();
   const filteredProducts =
     activeCategory === "all"
       ? products
@@ -49,7 +51,11 @@ export default function CataloguePage({ searchParams }: CataloguePageProps) {
 
       <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            goldRates={goldSnapshot.rates ?? undefined}
+          />
         ))}
       </div>
     </div>
