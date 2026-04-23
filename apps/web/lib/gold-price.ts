@@ -21,7 +21,7 @@ type MetalsDevLatestResponse = {
 };
 
 const DEFAULT_PROVIDER = "metalsdev";
-const DEFAULT_REFRESH_SECONDS = 60;
+const DEFAULT_REFRESH_SECONDS = 28800;
 
 export async function getCurrentGoldSnapshot(): Promise<GoldPriceSnapshot> {
   const provider = process.env.GOLD_PRICE_PROVIDER ?? DEFAULT_PROVIDER;
