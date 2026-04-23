@@ -2,17 +2,56 @@
 
 ## Summary
 
-Today we attempted Vercel deployment for the frontend and identified that the current failure is an install/configuration issue, not a Metals.dev runtime env issue.
+Today we completed a fresh successful Vercel deployment for the frontend.
+
+The working Vercel project is:
+
+- Project Name: `rouhi-gems-web`
+- Framework Preset: `Next.js`
+- Root Directory: `apps/web`
+- Build Command: `pnpm build`
+- Output Directory: left blank, or `.next`
+- Install Command: `pnpm install --filter @aurum/web... --frozen-lockfile`
 
 ## Vercel Direction
 
 - Vercel should deploy the frontend only.
 - Render will be used later for the separate Express backend.
-- The Vercel project should use the repository root because the current root-level `vercel.json` assumes monorepo root execution.
+- The successful fresh Vercel project uses `apps/web` as the Root Directory.
+- Because the Root Directory is `apps/web`, the Output Directory must not be `apps/web/.next`.
+- For this setup, leave Output Directory blank, or use `.next`.
 
-## Vercel Config Added
+## Successful Fresh Deployment
 
-Added root `vercel.json` with:
+The previous failing project appeared to mix repository-root output settings with an `apps/web` Root Directory.
+
+The failure happened after a successful Next.js build:
+
+```txt
+Error: The Next.js output directory "apps/web/.next" was not found at "/vercel/path0/apps/web/apps/web/.next".
+```
+
+Conclusion:
+
+- Next.js compiled successfully.
+- Vercel was looking for the build output in the wrong path.
+- Since Root Directory was `apps/web`, Vercel resolved `apps/web/.next` relative to `apps/web`.
+- That produced the incorrect duplicated path: `apps/web/apps/web/.next`.
+
+Working configuration:
+
+```txt
+Project Name: rouhi-gems-web
+Framework Preset: Next.js
+Root Directory: apps/web
+Build Command: pnpm build
+Output Directory: leave blank, or .next
+Install Command: pnpm install --filter @aurum/web... --frozen-lockfile
+```
+
+## Superseded Root Config
+
+Earlier we added a root `vercel.json` with:
 
 ```json
 {
@@ -23,13 +62,24 @@ Added root `vercel.json` with:
 }
 ```
 
-Added root package engine pin:
+This config assumes Vercel runs from the repository root.
+
+For the current successful project, the Vercel dashboard settings are the source of truth instead:
+
+- Root Directory: `apps/web`
+- Output Directory: blank or `.next`
+
+The root-level `vercel.json` should be treated carefully because it can conflict conceptually with an app-root Vercel project.
+
+Root package engine pin:
 
 ```json
 "engines": {
   "node": "20.x"
 }
 ```
+
+Vercel should use Node 20 for this project.
 
 ## Failed Deployment 1
 
@@ -74,23 +124,24 @@ The Vercel deployment + Next.js audit found:
 - P1: Order submission depends on a separate API that Vercel is not deploying.
 - P1: Production API CORS defaults only allow localhost unless `CORS_ORIGINS` is configured.
 - P2: `next@14.2.33` should be upgraded to at least `14.2.35` for the December 2025 security patch line.
-- P2: Root-directory setup is easy to misconfigure. Current `vercel.json` assumes Vercel Root Directory is the repository root.
+- P2: Root-directory setup is easy to misconfigure. The failed deploy used an `apps/web` Root Directory with a repository-root style Output Directory.
 
-## Required Fixes Before Next Vercel Deploy
+## Remaining Deployment Follow-Ups
 
-1. Remove `pnpm-lock.yaml` from `.gitignore`.
-2. Commit `pnpm-lock.yaml`.
-3. Keep Vercel Root Directory at repository root while using the current `vercel.json`.
-4. Ensure Vercel uses Node 20, not Node 24.
-5. Add frontend env vars in Vercel:
+1. Ensure Vercel uses Node 20, not Node 24.
+2. Add frontend env vars in Vercel:
    - `GOLD_PRICE_PROVIDER=metalsdev`
    - `METALS_DEV_API_KEY`
    - `GOLD_PRICE_REFRESH_SECONDS=28800`
    - `NEXT_PUBLIC_API_BASE_URL`
-6. Decide temporary behavior for order submit while Render backend is not deployed:
+3. Decide temporary behavior for order submit while Render backend is not deployed:
    - leave it failing with backend unavailable messaging, or
    - temporarily point to a deployed backend placeholder, or
    - temporarily hide/disable submit until Render is ready.
+4. Upgrade `next` from `14.2.33` to at least `14.2.35`.
+5. Keep the Vercel project settings aligned with the chosen Root Directory:
+   - if Root Directory is `apps/web`, Output Directory is blank or `.next`
+   - if Root Directory is repo root, Output Directory is `apps/web/.next`
 
 ## Important Env Note
 
@@ -104,12 +155,10 @@ If `METALS_DEV_API_KEY` is missing after a successful deploy:
 
 ## Next Deployment Step
 
-The immediate blocker is to track the lockfile:
+The frontend deployment is now successful.
 
-```powershell
-git add .gitignore pnpm-lock.yaml package.json vercel.json
-git commit -m "Fix Vercel frontend deployment config"
-git push origin main
-```
+Next deployment work should focus on the backend/API path:
 
-After that, redeploy from Vercel with the project root set to the repository root.
+1. Deploy `packages/api` to Render.
+2. Add Render environment variables for Supabase, Resend, MSG91, and CORS.
+3. Update Vercel `NEXT_PUBLIC_API_BASE_URL` to the Render backend URL.
