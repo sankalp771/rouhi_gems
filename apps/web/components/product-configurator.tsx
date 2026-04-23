@@ -12,6 +12,7 @@ type RequestForm = {
   name: string;
   phone: string;
   city: string;
+  specialInstructions: string;
 };
 
 type GoldSnapshotResponse = {
@@ -45,10 +46,13 @@ export function ProductConfigurator({
   );
   const [isOpen, setIsOpen] = useState(false);
   const [requestId, setRequestId] = useState<string | null>(null);
+  const [requestError, setRequestError] = useState<string | null>(null);
+  const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
   const [form, setForm] = useState<RequestForm>({
     name: "",
     phone: "",
-    city: ""
+    city: "",
+    specialInstructions: ""
   });
   const [liveGoldRates, setLiveGoldRates] = useState<GoldRateMap | null>(initialGoldRates);
   const [goldFetchedAt, setGoldFetchedAt] = useState<string | null | undefined>(initialFetchedAt);
@@ -64,9 +68,45 @@ export function ProductConfigurator({
     [diamondGrade, goldPurity, liveGoldRates, product]
   );
 
-  const submitRequest = () => {
-    const random = Math.floor(100000 + Math.random() * 900000);
-    setRequestId(`RG-${random}`);
+  const submitRequest = async () => {
+    setIsSubmittingRequest(true);
+    setRequestError(null);
+
+    try {
+      const response = await fetch(`${getApiBaseUrl()}/api/v1/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          productId: product.id,
+          goldPurity,
+          diamondGrade,
+          customer: {
+            name: form.name,
+            phone: form.phone,
+            city: form.city
+          },
+          specialInstructions: form.specialInstructions
+        })
+      });
+
+      const payload = (await response.json()) as { orderId?: string; error?: string };
+
+      if (!response.ok || !payload.orderId) {
+        throw new Error(payload.error ?? "Could not send your request right now.");
+      }
+
+      setRequestId(payload.orderId);
+    } catch (error) {
+      setRequestError(
+        error instanceof Error
+          ? error.message
+          : "Could not send your request right now."
+      );
+    } finally {
+      setIsSubmittingRequest(false);
+    }
   };
 
   useEffect(() => {
@@ -166,6 +206,7 @@ export function ProductConfigurator({
               onClick={() => {
                 setIsOpen(true);
                 setRequestId(null);
+                setRequestError(null);
               }}
               className="rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-ink/90"
             >
@@ -235,12 +276,26 @@ export function ProductConfigurator({
                   onChange={(value) => setForm((current) => ({ ...current, city: value }))}
                   placeholder="Your city"
                 />
+                <Field
+                  label="Special Instructions"
+                  value={form.specialInstructions}
+                  onChange={(value) =>
+                    setForm((current) => ({ ...current, specialInstructions: value }))
+                  }
+                  placeholder="Ring size, delivery timeline, or any custom note"
+                />
+                {requestError ? (
+                  <p className="rounded-[1rem] border border-rose/20 bg-white/80 px-4 py-3 text-sm text-rose">
+                    {requestError}
+                  </p>
+                ) : null}
                 <button
                   type="button"
                   onClick={submitRequest}
-                  className="mt-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-ink/90"
+                  disabled={isSubmittingRequest}
+                  className="mt-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Send Request
+                  {isSubmittingRequest ? "Sending Request..." : "Send Request"}
                 </button>
               </div>
             )}
@@ -249,6 +304,10 @@ export function ProductConfigurator({
       ) : null}
     </>
   );
+}
+
+function getApiBaseUrl() {
+  return process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
 }
 
 function formatTime(value: string) {
