@@ -36,7 +36,7 @@ Total = (gold_weight_g × gold_price_per_gram[purity])
 | SMS | MSG91 | OTP + order status updates |
 | Email | Resend | Transactional emails |
 | Frontend hosting | Vercel | Made for Next.js |
-| Backend hosting | Railway | Cheap, simple |
+| Backend hosting | Render | Cheap, simple |
 | Analytics | PostHog | Replaces GA + Mixpanel. Has session recording + funnels |
 | CMS | Sanity.io | Your brother can add designs without touching code |
 | Caching | Redis | Add in Phase 3 only. Don't overengineer early |
@@ -230,7 +230,7 @@ aurum/
 | Vercel | 100GB bandwidth | Fine for Phase 1-2 |
 | Supabase | 500MB DB | Lasts ~5000+ orders easily |
 | Cloudinary | 25GB storage | Compress images to WebP before uploading |
-| Railway | $5 credit/mo | ~₹400/mo after free tier |
+| Render | $5 credit/mo | ~₹400/mo after free tier |
 | MSG91 | Pay per SMS | ~₹0.20/SMS, pre-pay ₹500 |
 | Resend | 3000 emails/mo free | Fine for Phase 1-2 |
 | **Phase 1 total** | **~₹0–400/mo** | Add domain ~₹800/yr |
@@ -248,7 +248,7 @@ aurum/
 
 **Technical**
 - [ ] Lighthouse mobile > 85 on all core pages
-- [ ] All env variables in Vercel/Railway — not in codebase
+- [ ] All env variables in Vercel/Render — not in codebase
 - [ ] Razorpay webhook tested in test mode end to end
 - [ ] Full order flow tested: form → DB → SMS → admin view
 - [ ] Images compressed (WebP, under 200KB each)
