@@ -1,6 +1,0 @@
-{
-  "installCommand": "pnpm install --filter @aurum/web... --frozen-lockfile",
-  "buildCommand": "pnpm --filter @aurum/web build",
-  "framework": "nextjs",
-  "outputDirectory": "apps/web/.next"
-}
